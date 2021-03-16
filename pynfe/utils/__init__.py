@@ -9,7 +9,6 @@ try:
 except ImportError:
     raise Exception('Falhou ao importar lxml/ElementTree')
 
-from io import StringIO
 
 try:
     from . import flags
@@ -28,6 +27,7 @@ def obter_pais_por_codigo(codigo):
     # TODO
     if codigo == '1058':
         return 'Brasil'
+
 
 CAMINHO_DATA = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), '..', 'data')
@@ -97,7 +97,7 @@ def obter_codigo_por_municipio(municipio, uf):
 def obter_municipio_por_codigo(codigo, uf, normalizado=False):
     # TODO: fazer UF ser opcional
     municipios = carregar_arquivo_municipios(uf)
-    municipio = municipios.get(unicode(codigo))
+    municipio = municipios.get(codigo)
     if municipio is None:
         raise ValueError
     if normalizado:
@@ -107,10 +107,10 @@ def obter_municipio_por_codigo(codigo, uf, normalizado=False):
 
 # @memoize
 def obter_municipio_e_codigo(dados, uf):
-    '''Retorna código e município
+    """Retorna código e município
     municipio_ou_codigo - espera receber um dicionário no formato:
         {codigo: 121212, municipio: u'municipio'}
-    '''
+    """
 
     cod = dados.get('codigo', '')
     mun = normalizar_municipio(dados.get('municipio', ''))
@@ -123,6 +123,7 @@ def obter_municipio_e_codigo(dados, uf):
     # e não explodir esse a geração das outras nfes
     municipio = obter_municipio_por_codigo(cod, uf, normalizado=True)
     return cod, municipio
+
 
 # @memoize
 def extrair_tag(root):
@@ -137,12 +138,12 @@ def formatar_decimal(dec):
 
 
 def obter_uf_por_codigo(codigo_uf):
-    if isinstance(codigo_uf, basestring) and codigo_uf.isalpha():
+    if isinstance(codigo_uf, str) and codigo_uf.isalpha():
         return codigo_uf
 
     estados = {v: k for k, v in flags.CODIGOS_ESTADOS.items()}
-    return estados[unicode(codigo_uf)]
+    return estados[codigo_uf]
 
 
 def remover_acentos(txt):
-    return normalize('NFKD', txt).encode('ASCII','ignore').decode('ASCII')
+    return normalize('NFKD', txt).encode('ASCII', 'ignore').decode('ASCII')
