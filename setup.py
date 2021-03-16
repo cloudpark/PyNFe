@@ -3,7 +3,7 @@ import setuptools
 
 setuptools.setup(
     name='PyNFe',
-    version='0.4',
+    version='1.0.1',
     author='TadaSoftware',
     author_email='tadasoftware@gmail.com',
     url='https://github.com/TadaSoftware',
